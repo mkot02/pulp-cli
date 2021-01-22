@@ -76,18 +76,11 @@ def update(
     distribution = distribution_ctx.find(name=name)
     distribution_href = distribution["pulp_href"]
 
-    if base_path is not None:
-        if base_path == "":
-            raise click.ClickException("Base path cannot be empty string.")
-        if base_path != distribution["base_path"]:
-            distribution["base_path"] = base_path
+    if (base_path is not None) and (base_path != distribution["base_path"]):
+        distribution["base_path"] = base_path
 
     if publication is not None:
-        if publication == "":
-            # unset the publication
-            distribution["publication"] = None
-        else:
-            distribution["publication"] = publication
+        distribution["publication"] = None if publication == "" else publication
 
     distribution_ctx.update(distribution_href, body=distribution)
 
